@@ -1,6 +1,27 @@
 const domready = Rx.Observable.fromEvent(document, 'DOMContentLoaded');
 
 domready.subscribe(e => {
+  const request = indexedDB.open('rx-sandbox', 1);
+
+  Rx.Observable.fromEvent(request, 'upgradeneeded')
+    .pluck('target', 'result')
+    .subscribe(db => {
+      if (db.objectStoreNames.contains('todo')) {
+        db.deleteObjectStore('todo');
+      }
+
+      db.createObjectStore('todo', {
+        keyPath       : 'datetime',
+        autoIncrement : true
+      });
+    });
+
+  Rx.Observable.fromEvent(request, 'success')
+    .pluck('target', 'result')
+    .subscribe(db => {
+      console.log(db);
+    });
+
   const input = document.querySelector('input');
   const ul = document.querySelector('ul');
   const list = ul.getElementsByTagName('li');
