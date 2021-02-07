@@ -1,3 +1,4 @@
+import rx from 'https://cdn.skypack.dev/rx';
 class Database {
   constructor(storeName, keyPath) {
     this.database = null;
@@ -74,7 +75,7 @@ class Database {
   }
 }
 
-const domready = Rx.Observable.fromEvent(document, 'DOMContentLoaded');
+const domready = rx.Observable.fromEvent(document, 'DOMContentLoaded');
 
 domready.subscribe(e => {
   const input = document.querySelector('input');
@@ -96,7 +97,7 @@ domready.subscribe(e => {
     }
   });
 
-  Rx.Observable.fromEvent(input, 'keyup')
+  rx.Observable.fromEvent(input, 'keyup')
     .debounce(100)
     .filter(e => e.keyCode === 13)
     .filter(e => e.shiftKey)
